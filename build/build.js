@@ -29,7 +29,12 @@ async function build(opts) {
           __VERSION__: version,
           'process.env.SSR': false
         })
-      ])
+      ]),
+      onwarn(message) {
+        if (message.code === 'UNRESOLVED_IMPORT') {
+          throw new Error(`Could not resolved ${moessage.source}`)
+        }
+      }
     })
     .then(function (bundle) {
       var dest = 'lib/' + (opts.output || opts.input)
